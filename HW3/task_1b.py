@@ -2,6 +2,7 @@ import numpy as np
 import scipy.io
 import matplotlib
 import matplotlib.pyplot as plt
+from scipy.linalg import block_diag
 
 # Read csv file
 mat = scipy.io.loadmat('data.mat')
@@ -14,36 +15,6 @@ R = mat["R"]    # (3, 3)
 t = mat["t"]    # (3, 1)
 z_1 = mat["z_1"]    # (20, 2)
 z_2 = mat["z_2"]    # (20, 2)
-
-# print(z_1[5:10, 0])
-# print(z_1[5:10, 1])
-# print(np.cov(z_1[5:10, 0], z_1[5:10, 1]))
-
-# plt.plot(z_2[:, 0])
-# plt.plot(z_2[:, 1])
-# plt.show()
-
-# # Code to check data dimension
-# for i, data in enumerate(mat):
-#     if i >= 3:
-#         print(data, mat[data].shape)
-
-# def H_1(Kf_1, p):
-#     px = p[0][0]
-#     py = p[1][0]
-#     pz = p[2][0]
-#     temp = np.array([[1/pz, 0, -px / pz ** 2], [0, 1/pz, -py / pz ** 2]])
-#     return Kf_1 @ temp
-
-# def H_2(Kf_2, p, R):
-#     px = p[0][0]
-#     py = p[1][0]
-#     pz = p[2][0]
-#     temp = np.array([[1/pz, 0, -px / pz ** 2], [0, 1/pz, -py / pz ** 2]])
-#     return Kf_2 @ temp @ R.T
-
-# def h1(Kf_1, p, C_1):
-#     return Kf_1 @ 
 
 class EKF:
     def __init__(self, system, init):
@@ -166,8 +137,3 @@ plt.plot(p[:, 1], label='y')
 plt.plot(p[:, 2], label='z')
 plt.legend()
 plt.show()
-
-# sigma_norm = [np.linalg.norm(i) for i in sigma]
-
-# plt.plot(sigma_norm)
-# plt.show()
