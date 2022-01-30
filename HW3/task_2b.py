@@ -41,8 +41,8 @@ class PF:
         self.particle = Particle()
 
         self.W = 0.01 * np.eye(3)
-        self.V_1 = 1 * 2.5 * self.getV(self.z_1)
-        self.V_2 = 1 * 2.5 * self.getV(self.z_2)
+        self.V_1 = 0.5 * 2.5 * self.getV(self.z_1)
+        self.V_2 = 0.5 * 2.5 * self.getV(self.z_2)
         self.V = block_diag(self.V_1, self.V_2)
 
         self.LW = np.linalg.cholesky(self.W)  # Cholesky factor of Q
@@ -139,6 +139,9 @@ for i in range(z_1.shape[0]):
     z = np.concatenate((z_1[i].reshape((2, 1)), z_2[i].reshape((2, 1))), axis=0)
     pf.correction(z)
 
+    # plt.plot(pf.particle.p[:, 0], pf.particle.p[:, 1], '.')
+    # plt.show()
+
     if pf.Neff < pf.n / 5:
         pf.resampling()
 
@@ -146,6 +149,8 @@ for i in range(z_1.shape[0]):
     y = np.mean(pf.particle.p[:, 1])
     z = np.mean(pf.particle.p[:, 2])
     p.append(np.array([[x], [y], [z]]))
+
+
 
 p = np.array(p)
 
