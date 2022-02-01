@@ -151,22 +151,32 @@ ekf = EKF(sys, init)
 p = []
 sigma = []
 p.append(init.p)
-sigma.append(init.sigma)
+sigma.append(np.mean(init.sigma))
 for i in range(z_1.shape[0]):
     print(i)
     ekf.predition()
     ekf.correction(z_1[i].reshape((2, 1)), z_2[i].reshape((2, 1)))
     p.append(ekf.p)
-    sigma.append(ekf.sigma)
+    sigma.append(np.mean(ekf.sigma))
 
 p = np.array(p)
+sigma = np.array(sigma)
 # plt.plot()
 # print(len(p))
-print(p[:, 0].shape)
+print(sigma.shape)
 
 plt.plot(p[:, 0], label='x')
 plt.plot(p[:, 1], label='y')
 plt.plot(p[:, 2], label='z')
+plt.legend()
+plt.title('Extended Kalman Filter sequential version')
+plt.xlabel('time step')
+plt.ylabel('position')
+
+plt.show()
+
+print(sigma)
+plt.plot(sigma, label='sigma')
 plt.legend()
 plt.title('Extended Kalman Filter sequential version')
 plt.xlabel('time step')
