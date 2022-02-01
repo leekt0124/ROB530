@@ -58,9 +58,11 @@ class EKF:
 
         # Need to be tuned
         self.W = 0.01 * np.eye(3)
-        self.V_1 = 2.5 * self.getV(self.z_1)
+        # self.V_1 = 10 * self.getV(self.z_1)
+        self.V_1 =  np.array([[145.0, 0], [0, 280]])
         print("self.V_1 = ", self.V_1)
-        self.V_2 = 2.5 * self.getV(self.z_2)
+        # self.V_2 = 10 * self.getV(self.z_2)
+        self.V_2 =  np.array([[1150.0, 0], [0, 540.0]])
         print("self.V_2 = ", self.V_2)
 
         self.p = init.p  # state vector
@@ -103,7 +105,7 @@ class EKF:
         # correct z1
         # print("1 ", self.p)
         h_1 = self.h_1()
-        print("z_1 = ", z_1, " h_1 = ", h_1)
+        # print("z_1 = ", z_1, " h_1 = ", h_1)
         innovation = z_1 - h_1
         H_1 = self.H_1()
         innovation_cov = H_1 @ self.sigma @ H_1.T + self.V_1
@@ -115,13 +117,13 @@ class EKF:
         # correct z2
         h_2 = self.h_2()
         # print("2 ", self.p)
-        print("z_2 = ", z_2, " h_2 = ", h_2)
+        # print("z_2 = ", z_2, " h_2 = ", h_2)
         innovation = z_2 - h_2
         H_2 = self.H_2()
         innovation_cov = H_2 @ self.sigma @ H_2.T + self.V_2
         K = self.sigma @ H_2.T @ np.linalg.inv(innovation_cov)
         self.p = self.p + K @ innovation
-        print(self.p)
+        # print(self.p)
         # print(self.sigma)
         self.sigma = (np.eye(3) - K @ H_2) @ self.sigma
         # self.sigma = (np.eye(3) - K @ H_2) @ self.sigma @ (np.eye(3) - K @ H_2).T + K @ self.V_2 @ K.T

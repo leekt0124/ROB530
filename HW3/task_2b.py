@@ -125,7 +125,7 @@ sys.z_2 = z_2
 init = myStruc()
 init.n = 300
 init.p = np.array([[1], [1], [1]])
-init.sigma = 10 * np.eye(3)
+init.sigma = 1 * np.eye(3)
 
 pf = PF(sys, init)
 # pf.prediction()

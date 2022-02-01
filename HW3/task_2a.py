@@ -167,6 +167,9 @@ for i in range(z_1.shape[0]):
     print(i)
     pf.prediction()
     pf.correction_1(z_1[i].reshape((2, 1)))
+    
+    if pf.Neff < pf.n / 5:
+        pf.resampling()
     pf.correction_2(z_2[i].reshape((2, 1)))
 
     if pf.Neff < pf.n / 5:
