@@ -28,19 +28,13 @@ class EKF:
         self.z_2 = system.z_2
 
         # Need to be tuned
-        self.W = 0.01 * np.eye(3)
-        self.V_1 = 2.5 * self.getV(self.z_1)
-        # print("self.V_1 = ", self.V_1)
-        self.V_2 = 2.5 * self.getV(self.z_2)
-        # print("self.V_2 = ", self.V_2)
+        self.W = sys.W
+        self.V_1 = sys.V_1
+        self.V_2 = sys.V_2
         self.V = block_diag(self.V_1, self.V_2)
-        # print("self.V = ", self.V.shape)
 
         self.p = init.p  # state vector
         self.sigma = init.sigma  # state covariance
-
-    def getV(self, z):
-        return np.cov(z[:, 0], z[:, 1])
 
     def projection(self, p):
         x = p[0][0]
@@ -82,7 +76,6 @@ class EKF:
 
     def correction(self, z):
         h = self.h()
-        print("z = ", z, " h = ", h)
         innovation = z - h
         H = self.H()
         innovation_cov = H @ self.sigma @ H.T + self.V
@@ -102,23 +95,23 @@ sys.R = R
 sys.t = t
 sys.z_1 = z_1
 sys.z_2 = z_2
+sys.W = 0.01 * np.eye(3)
+sys.V_1 =  np.array([[145.0, 0], [0, 280]])
+sys.V_2 =  np.array([[1150.0, 0], [0, 540.0]])
 
 
 init = myStruc()
-init.p = np.array([[1], [1], [1]])
+init.p = np.array([[1], [1], [5]])
 init.sigma = 1000 * np.eye(3)
 
 
 ekf = EKF(sys, init)
-# print(ekf.H(), "\n", ekf.H_1(), ekf.H_2())
-# print(ekf.h(), ekf.h_1(), ekf.h_2())
 
 p = []
 sigma = []
 p.append(init.p)
 sigma.append(init.sigma)
 for i in range(z_1.shape[0]):
-    print(i)
     ekf.predition()
     z = np.concatenate((z_1[i].reshape((2, 1)), z_2[i].reshape((2, 1))), axis=0)
     ekf.correction(z)
@@ -126,10 +119,6 @@ for i in range(z_1.shape[0]):
     sigma.append(ekf.sigma)
 
 p = np.array(p)
-print("p.shape = ", p.shape)
-# plt.plot()
-# print(len(p))
-print(p[:, 0].shape)
 
 plt.plot(p[:, 0], label='x')
 plt.plot(p[:, 1], label='y')

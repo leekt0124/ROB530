@@ -42,7 +42,9 @@ class PF:
 
         self.W = 0.01 * np.eye(3)
         self.V_1 = 0.5 * 2.5 * self.getV(self.z_1)
+        print(self.V_1)
         self.V_2 = 0.5 * 2.5 * self.getV(self.z_2)
+        print(self.V_2)
         self.V = block_diag(self.V_1, self.V_2)
 
         self.LW = np.linalg.cholesky(self.W)  # Cholesky factor of Q
@@ -123,7 +125,7 @@ sys.z_1 = z_1
 sys.z_2 = z_2
 
 init = myStruc()
-init.n = 300
+init.n = 200
 init.p = np.array([[1], [1], [1]])
 init.sigma = 1 * np.eye(3)
 

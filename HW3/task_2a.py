@@ -40,9 +40,9 @@ class PF:
         self.n = init.n
         self.particle = Particle()
 
-        self.W = 0.1 * np.eye(3)
-        self.V_1 = 2.5 * self.getV(self.z_1)
-        self.V_2 = 2.5 * self.getV(self.z_2)
+        self.W = system.W
+        self.V_1 = system.V_1
+        self.V_2 = system.V_2
 
         self.LW = np.linalg.cholesky(self.W)  # Cholesky factor of Q
 
@@ -151,11 +151,14 @@ sys.R = R
 sys.t = t
 sys.z_1 = z_1
 sys.z_2 = z_2
+sys.W = 0.01 * np.eye(3)
+sys.V_1 = np.array([[18.0, -2.92659222], [-2.92659222, 35.5]])
+sys.V_2 = np.array([[144.5, 4.83429415], [4.83429415, 67.8960584]])
 
 init = myStruc()
-init.n = 300
+init.n = 200
 init.p = np.array([[1], [1], [1]])
-init.sigma = 10 * np.eye(3)
+init.sigma = 1 * np.eye(3)
 
 pf = PF(sys, init)
 # pf.prediction()
