@@ -6,6 +6,7 @@ from scipy.linalg import block_diag
 from numpy.random import randn
 from scipy.stats import multivariate_normal
 from numpy.random import randn, rand
+import time
 
 # Read csv file
 mat = scipy.io.loadmat('data.mat')
@@ -133,6 +134,8 @@ p = list()
 p.append(init.p)
 print(init.p)
 
+
+start = time.time()
 for i in range(z_1.shape[0]):
     print(i)
     pf.prediction()
@@ -150,7 +153,7 @@ for i in range(z_1.shape[0]):
     z = np.mean(pf.particle.p[:, 2])
     p.append(np.array([[x], [y], [z]]))
 
-
+end = time.time()
 
 p = np.array(p)
 
@@ -165,3 +168,4 @@ plt.ylabel('position')
 plt.show()
 
 print("Estimated object position = \n", p[-1, :])
+print(f"Runtime of the program is {end - start}")

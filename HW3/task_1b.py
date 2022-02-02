@@ -3,6 +3,7 @@ import scipy.io
 import matplotlib
 import matplotlib.pyplot as plt
 from scipy.linalg import block_diag
+import time
 
 # Read csv file
 mat = scipy.io.loadmat('data.mat')
@@ -117,6 +118,7 @@ p = []
 sigma = []
 p.append(init.p)
 sigma.append(init.sigma)
+start = time.time()
 for i in range(z_1.shape[0]):
     print(i)
     ekf.predition()
@@ -124,6 +126,8 @@ for i in range(z_1.shape[0]):
     ekf.correction(z)
     p.append(ekf.p)
     sigma.append(ekf.sigma)
+
+end = time.time()
 
 p = np.array(p)
 print("p.shape = ", p.shape)
@@ -142,3 +146,4 @@ plt.ylabel('position')
 plt.show()
 
 print("Estimated object position = \n", p[-1, :])
+print(f"Runtime of the program is {end - start}")
