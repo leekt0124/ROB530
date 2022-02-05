@@ -57,9 +57,6 @@ class PF:
         self.particle.w = np.array(self.particle.w).reshape(-1, 1)
         # print(self.particle.w)
 
-    def getV(self, z):
-        return np.cov(z[:, 0], z[:, 1])
-
     def projection(self, p):
         x = p[0][0]
         y = p[1][0]
