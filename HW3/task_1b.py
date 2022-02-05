@@ -30,9 +30,9 @@ class EKF:
 
         # Need to be tuned
         self.W = 0.01 * np.eye(3)
-        self.V_1 = 2.5 * self.getV(self.z_1)
+        self.V_1 = 0.0000000001 * 2.5 * self.getV(self.z_1)
         # print("self.V_1 = ", self.V_1)
-        self.V_2 = 2.5 * self.getV(self.z_2)
+        self.V_2 = 0.0000000001 * 2.5 * self.getV(self.z_2)
         # print("self.V_2 = ", self.V_2)
         self.V = block_diag(self.V_1, self.V_2)
         # print("self.V = ", self.V.shape)
@@ -106,7 +106,7 @@ sys.z_2 = z_2
 
 
 init = myStruc()
-init.p = np.array([[1], [1], [1]])
+init.p = np.array([[4], [4], [1]])
 init.sigma = 1000 * np.eye(3)
 
 
