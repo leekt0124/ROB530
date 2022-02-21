@@ -1,0 +1,36 @@
+
+### World ###
+world_dimension: 2  # dimension of the world. 2 for 2D world, 3 for 3D world.
+
+
+### Data Handler ###
+data_path: "./data/data.mat"
+
+### Robot System ###
+filter_name: "test"      # name of the filter # EKF # UKF # PF # InEKF # test
+Lie2Cart: False            # Lie to Cartesian for 2.E extra points
+
+# motion noise (in odometry space, see Table 5.5, p.134 in book).
+alphas_sqrt: [0.00025, 0.00005, 0.0025, 0.0005, 0.0025, 0.0005]
+# sensor noise
+beta: 5 # approx 5 deg.
+
+# init state
+deltaT: 0.1
+initial_state_mean: [180, 50, 0]
+initial_state_variance: [1, 1, 1] 
+
+
+### path publisher ###
+pose_topic: "robot_state/pose"
+path_topic: "robot_state/path"
+path_frame_id: "map"
+gt_path_topic: "groundtruth/path"
+command_path_topic: "command/path"
+ellipse_topic: "robot_state/nonlinear_cov"
+
+
+### marker publisher ###
+landmark_topic: "landmarks"
+marker_frame_id: "map"
+loop_sleep_time: 0.1
