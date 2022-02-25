@@ -16,8 +16,8 @@ class EKF:
         #   init:   initial state mean and covariance
         self.gfun = system.gfun  # motion model
         self.hfun = system.hfun  # measurement model
-        self.Gfun = init.Gfun  # Jocabian of motion model
-        self.Vfun = init.Vfun  # Jocabian of motion model
+        self.Gfun = init.Gfun  # Jocabian of motion model (state transform)
+        self.Vfun = init.Vfun  # Jocabian of motion model (control signal)
         self.Hfun = init.Hfun  # Jocabian of measurement model
         self.M = system.M # motion noise covariance
         self.Q = system.Q # measurement noise covariance
@@ -40,6 +40,20 @@ class EKF:
         # TODO: Implement the prediction step for EKF                                 #
         # Hint: save your predicted state and cov as X_pred and P_pred                #
         ###############################################################################
+        print("X = ", X)
+        print("P = ", P)
+        X_pred = self.gfun(X, u)
+        print("X_pred = ", X_pred)
+        # print("self.Gfun = ", self.Gfun)
+        # print("self.Vfun = ", self.Vfun)
+        G = self.Gfun(X, u)
+        V = self.Vfun(X, u)
+        # alphas = [0.00025, 0.00005, 0.0025, 0.0005, 0.0025, 0.0005]
+        print("G = ", G)
+        print("V = ", V)
+        print("self.M = ", self.M(u))
+        M = self.M(u)
+        P_pred = G @ P @ G.T + V @ M @ V.T
         
 
         ###############################################################################
@@ -68,6 +82,53 @@ class EKF:
         # Hint: you can use landmark1.getPosition()[0] to get the x position of 1st   #
         #       landmark, and landmark1.getPosition()[1] to get its y position        #
         ###############################################################################
+        # z.reshape((1, -1))
+        # np.reshape(z, (6, -1))
+        # print(type(z))
+        # z.reshape(2, 3)
+        # print(z)
+        # z1 = z.reshape(6, -1)[0:3, :]
+        z1 = z[0:2]
+        print("z1 = ", z1)
+        # z2 = z.reshape(6, -1)[0:3, :]
+        z2 = z[3:5]
+        print("z2 = ", z2)
+        # print("z.shape = ", z.shape)
+
+# def Hfun(landmark_x, landmark_y, mu_pred, z_hat):
+#     output = np.array([
+#         [(landmark_y-mu_pred[1])/(z_hat[1]**2),   -(landmark_x-mu_pred[0])/(z_hat[1]**2),-1],\
+#         [-(landmark_x-mu_pred[0])/z_hat[1],       -(landmark_y-mu_pred[1])/z_hat[1],0]])
+#     return output
+        
+        h = self.hfun(landmark1.getPosition()[0], landmark1.getPosition()[1], X_predict)
+        print("h = ", h)
+        H = self.Hfun(landmark1.getPosition()[0], landmark1.getPosition()[1], X_predict, z1)
+        innovation = z1 - h
+        print("H = ", H)
+        print("Q = ", self.Q)
+        innovation_cov = H @ P_predict @ H.T + self.Q
+        print("innovation_cov = ", innovation_cov)
+        K = P_predict @ H.T @ np.linalg.inv(innovation_cov)
+        X_predict = X_predict + K @ innovation
+        P_predict = (np.identity(3) - K @ H) @ P_predict
+
+        h = self.hfun(landmark2.getPosition()[0], landmark2.getPosition()[1], X_predict)
+        H = self.Hfun(landmark2.getPosition()[0], landmark2.getPosition()[1], X_predict, z2)
+        innovation = z2 - h
+        innovation_cov = H @ P_predict @ H.T + self.Q
+        K = P_predict @ H.T @ np.linalg.inv(innovation_cov)
+        X = X_predict + K @ innovation
+        P = (np.identity(3) - K @ H) @ P_predict
+
+
+
+# def Hfun(landmark_x, landmark_y, mu_pred, z_hat):
+#     output = np.array([
+#         [(landmark_y-mu_pred[1])/(z_hat[1]**2),   -(landmark_x-mu_pred[0])/(z_hat[1]**2),-1],\
+#         [-(landmark_x-mu_pred[0])/z_hat[1],       -(landmark_y-mu_pred[1])/z_hat[1],0]])
+#     return output
+    
 
         
         ###############################################################################
