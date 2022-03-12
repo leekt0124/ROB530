@@ -40,7 +40,9 @@ class UKF:
         # TODO: Implement the prediction step for UKF                                 #
         # Hint: save your predicted state and cov as X_pred and P_pred                #
         ###############################################################################
-        
+        # Compute L'
+        self.sigma_point(X.reshape(-1, 1), P, self.kappa_g)
+        # self
 
         ###############################################################################
         #                         END OF YOUR CODE                                    #
@@ -84,6 +86,7 @@ class UKF:
         self.w[0] = kappa / (self.n + kappa)
         self.w[1:] = 1 / (2 * (self.n + kappa))
         self.w = self.w.reshape(-1)
+        # print("shpae of self.w = ", self.w.shape)
 
     def getState(self):
         return deepcopy(self.state_)

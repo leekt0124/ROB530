@@ -95,39 +95,47 @@ class EKF:
         print("z2 = ", z2)
         # print("z.shape = ", z.shape)
 
-# def Hfun(landmark_x, landmark_y, mu_pred, z_hat):
-#     output = np.array([
-#         [(landmark_y-mu_pred[1])/(z_hat[1]**2),   -(landmark_x-mu_pred[0])/(z_hat[1]**2),-1],\
-#         [-(landmark_x-mu_pred[0])/z_hat[1],       -(landmark_y-mu_pred[1])/z_hat[1],0]])
-#     return output
+        z_stack = np.concatenate((z1, z2), axis=0)
         
-        h = self.hfun(landmark1.getPosition()[0], landmark1.getPosition()[1], X_predict)
-        print("h = ", h)
-        H = self.Hfun(landmark1.getPosition()[0], landmark1.getPosition()[1], X_predict, z1)
-        innovation = z1 - h
-        print("H = ", H)
-        print("Q = ", self.Q)
-        innovation_cov = H @ P_predict @ H.T + self.Q
-        print("innovation_cov = ", innovation_cov)
-        K = P_predict @ H.T @ np.linalg.inv(innovation_cov)
-        X_predict = X_predict + K @ innovation
-        P_predict = (np.identity(3) - K @ H) @ P_predict
+        h1 = self.hfun(landmark1.getPosition()[0], landmark1.getPosition()[1], X_predict)
+        H1 = self.Hfun(landmark1.getPosition()[0], landmark1.getPosition()[1], X_predict, z1)
 
-        h = self.hfun(landmark2.getPosition()[0], landmark2.getPosition()[1], X_predict)
-        H = self.Hfun(landmark2.getPosition()[0], landmark2.getPosition()[1], X_predict, z2)
-        innovation = z2 - h
-        innovation_cov = H @ P_predict @ H.T + self.Q
-        K = P_predict @ H.T @ np.linalg.inv(innovation_cov)
+        h2 = self.hfun(landmark2.getPosition()[0], landmark2.getPosition()[1], X_predict)
+        H2 = self.Hfun(landmark2.getPosition()[0], landmark2.getPosition()[1], X_predict, z2)
+
+        h_stack = np.concatenate((h1, h2), axis=0)
+        H_stack = np.concatenate((H1, H2), axis=0)
+
+        innovation = z_stack - h_stack
+
+        Q_stack = block_diag(self.Q, self.Q)
+
+        innovation_cov = H_stack @ P_predict @ H_stack.T + Q_stack
+
+        K = P_predict @ H_stack.T @ np.linalg.inv(innovation_cov)
+
         X = X_predict + K @ innovation
-        P = (np.identity(3) - K @ H) @ P_predict
+        P = (np.identity(3) - K @ H_stack) @ P_predict
 
 
 
-# def Hfun(landmark_x, landmark_y, mu_pred, z_hat):
-#     output = np.array([
-#         [(landmark_y-mu_pred[1])/(z_hat[1]**2),   -(landmark_x-mu_pred[0])/(z_hat[1]**2),-1],\
-#         [-(landmark_x-mu_pred[0])/z_hat[1],       -(landmark_y-mu_pred[1])/z_hat[1],0]])
-#     return output
+        # innovation = z1 - h
+        # print("P_predict = ", P_predict)
+        # print("H = ", H)
+        # print("Q = ", self.Q)
+        # innovation_cov = H @ P_predict @ H.T + self.Q
+        # print("innovation_cov = ", innovation_cov)
+        # K = P_predict @ H.T @ np.linalg.inv(innovation_cov)
+        # X_predict = X_predict + K @ innovation
+        # P_predict = (np.identity(3) - K @ H) @ P_predict
+
+        # h = self.hfun(landmark2.getPosition()[0], landmark2.getPosition()[1], X_predict)
+        # H = self.Hfun(landmark2.getPosition()[0], landmark2.getPosition()[1], X_predict, z2)
+        # innovation = z2 - h
+        # innovation_cov = H @ P_predict @ H.T + self.Q
+        # K = P_predict @ H.T @ np.linalg.inv(innovation_cov)
+        # X = X_predict + K @ innovation
+        # P = (np.identity(3) - K @ H) @ P_predict
     
 
         

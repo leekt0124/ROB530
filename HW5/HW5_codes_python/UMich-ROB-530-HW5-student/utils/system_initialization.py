@@ -32,6 +32,7 @@ def system_initialization(alphas, beta):
     sys.gfun = gfun
     sys.hfun = hfun
     sys.M = partial(M, alphas=alphas)
+    # sys.Q = np.array([[beta**2,0],[0,100]])
     sys.Q = np.array([[beta**2,0],[0,25**2]])
     sys.W = np.diag([0.05**2,0.1**2,0.1**2])
     sys.V = 10000*np.eye(2)

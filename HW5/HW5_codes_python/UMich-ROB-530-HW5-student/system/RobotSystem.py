@@ -72,7 +72,7 @@ class RobotSystem:
 
     def run_filter(self):
         
-        results = np.zeros((self.num_step,10))
+        results = np.zeros((self.num_step,7))
         for t in range(self.num_step):
             
             # get data for current timestamp

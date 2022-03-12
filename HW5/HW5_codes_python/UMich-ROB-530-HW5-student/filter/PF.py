@@ -46,7 +46,13 @@ class PF:
         # Hint: Use rng.standard_normal instead of np.random.randn.                   #
         #       It is statistically more random.                                      #
         ###############################################################################
-        pass
+        # print("self.M(u) = ", self.M(u))
+        for i in range(self.n):
+            # print(self.particles[:, i].reshape(3, 1))
+            # print("u = ", u)
+            # t = self.gfun(self.particles[:, i].reshape(3, 1), u.reshape(3, 1))
+            self.particles[:, i] = self.gfun(self.particles[:, i], u.reshape(3, 1) + np.linalg.cholesky(self.M(u)) @ rng.standard_normal(size = (3, 1)))
+
 
         ###############################################################################
         #                         END OF YOUR CODE                                    #
@@ -63,7 +69,30 @@ class PF:
         # Hint: you can use landmark1.getPosition()[0] to get the x position of 1st   #
         #       landmark, and landmark1.getPosition()[1] to get its y position        #
         ###############################################################################
+        z1 = z[0:2]
+        z2 = z[3:5]
+        z_stack = np.concatenate((z1, z2), axis=0)
 
+        prob = np.zeros(self.n)
+
+        Q_stack = block_diag(self.Q, self.Q)
+
+        for i in range(self.n):
+            X_predict = self.particles[:, i]
+        
+            h1 = self.hfun(landmark1.getPosition()[0], landmark1.getPosition()[1], X_predict)
+            h2 = self.hfun(landmark2.getPosition()[0], landmark2.getPosition()[1], X_predict)
+            h_stack = np.concatenate((h1, h2), axis=0)
+
+            innovation = z_stack - h_stack
+            prob[i] = multivariate_normal.pdf(innovation.reshape(-1), mean=np.zeros(4), cov=Q_stack)
+
+        self.particle_weight = np.multiply(self.particle_weight, prob)
+        self.particle_weight = self.particle_weight / np.sum(self.particle_weight)
+
+        Neff = 1 / np.sum(np.power(self.particle_weight, 2))
+        if Neff < self.n / 5:
+            self.resample()
         
         ###############################################################################
         #                         END OF YOUR CODE                                    #

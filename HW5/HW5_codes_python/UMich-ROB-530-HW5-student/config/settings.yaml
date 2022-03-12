@@ -7,13 +7,17 @@ world_dimension: 2  # dimension of the world. 2 for 2D world, 3 for 3D world.
 data_path: "./data/data.mat"
 
 ### Robot System ###
-filter_name: "EKF"      # name of the filter # EKF # UKF # PF # InEKF # test
+filter_name: "UKF"      # name of the filter # EKF # UKF # PF # InEKF # test
 Lie2Cart: False            # Lie to Cartesian for 2.E extra points
 
 # motion noise (in odometry space, see Table 5.5, p.134 in book).
+# alphas_sqrt: [0.25, 0.05, 2.5, 0.5, 2.5, 0.5]
+# alphas_sqrt: [0.0000025, 0.0000005, 0.000025, 0.000005, 0.000025, 0.000005]
+# alphas_sqrt: [0.0025, 0.0005, 0.025, 0.005, 0.025, 0.005]
 alphas_sqrt: [0.00025, 0.00005, 0.0025, 0.0005, 0.0025, 0.0005]
 # sensor noise
 beta: 5 # approx 5 deg.
+# beta: 5 # approx 5 deg.
 
 # init state
 deltaT: 0.1
