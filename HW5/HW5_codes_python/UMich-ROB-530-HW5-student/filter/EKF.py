@@ -82,12 +82,6 @@ class EKF:
         # Hint: you can use landmark1.getPosition()[0] to get the x position of 1st   #
         #       landmark, and landmark1.getPosition()[1] to get its y position        #
         ###############################################################################
-        # z.reshape((1, -1))
-        # np.reshape(z, (6, -1))
-        # print(type(z))
-        # z.reshape(2, 3)
-        # print(z)
-        # z1 = z.reshape(6, -1)[0:3, :]
         z1 = z[0:2]
         print("z1 = ", z1)
         # z2 = z.reshape(6, -1)[0:3, :]
@@ -114,10 +108,11 @@ class EKF:
 
         K = P_predict @ H_stack.T @ np.linalg.inv(innovation_cov)
 
-        X = X_predict + K @ innovation
-        P = (np.identity(3) - K @ H_stack) @ P_predict
+        # X = X_predict + K @ innovation
+        # P = (np.identity(3) - K @ H_stack) @ P_predict
 
-
+        X = X_predict
+        P = P_predict
 
         # innovation = z1 - h
         # print("P_predict = ", P_predict)

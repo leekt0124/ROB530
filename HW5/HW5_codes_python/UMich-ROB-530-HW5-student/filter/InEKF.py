@@ -1,6 +1,7 @@
 
 from mimetypes import init
 from os import stat
+from stat import UF_APPEND
 from statistics import mean
 from scipy.linalg import block_diag
 from copy import deepcopy, copy
@@ -31,14 +32,39 @@ class InEKF:
         # self.Hfun = init.Hfun  # Jocabian of measurement model
         self.W = system.W # motion noise covariance
         self.V = system.V # measurement noise covariance
-        
-        self.mu = init.mu
-        self.Sigma = init.Sigma
+        self.A = np.zeros((3, 3))
+        self.dt = 1
+
+        self.mu = init.mu # (3, 3)
+        self.Sigma = init.Sigma # (3, 3)
 
         self.state_ = RobotState()
-        X = np.array([self.mu[0,2], self.mu[1,2], np.arctan2(self.mu[1,0], self.mu[0,0])])
+        X = np.array([self.mu[0,2], self.mu[1,2], np.arctan2(self.mu[1,0], self.mu[0,0])]) # (3, )
         self.state_.setState(X)
         self.state_.setCovariance(init.Sigma)
+
+    def Ad(self, X):
+        # Adjoint in SO(3)
+        # See http://ethaneade.com/lie.pdf for detail derivation
+        x = X[0, 2]
+        y = X[1, 2]
+        X[0, 2] = y
+        X[1, 2] = -x
+        return X
+
+    def wedge(self, x):
+        # wedge operation for so(3) to put an R^3 vector to the Lie algebra basis
+        G1 = np.array([[0, 0, 1],
+                       [0, 0, 0],
+                       [0, 0, 0]])  # omega_1
+        G2 = np.array([[0, 0, 0],
+                       [0, 0, 1],
+                       [0, 0, 0]])  # omega_2
+        G3 = np.array([[0, -1, 0],
+                       [1, 0, 0],
+                       [0, 0, 0]])  # omega_3
+        xhat = G1 * x[0] + G2 * x[1] + G3 * x[2]
+        return xhat
 
     
     def prediction(self, u):
@@ -55,8 +81,9 @@ class InEKF:
         ###############################################################################
         # TODO: Propagate mean and covairance (You need to compute adjoint AdjX)      #
         ###############################################################################
+        adjX = self.Ad(self.mu)
         
-
+        
         ###############################################################################
         #                         END OF YOUR CODE                                    #
         ###############################################################################
@@ -69,7 +96,10 @@ class InEKF:
         # Hint: you can save predicted state and cov as self.X_pred and self.P_pred   #
         #       and use them in the correction function                               #
         ###############################################################################
-        pass
+        phi = expm(self.A)
+        self.X_pred = phi @ self.Sigma @ phi.T + adjX @ self.Q @ adjX.T
+        self.P_pred = self.f(self.mu, u * self.dt)
+        
 
         ###############################################################################
         #                         END OF YOUR CODE                                    #

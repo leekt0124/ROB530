@@ -1,4 +1,3 @@
-
 from scipy.linalg import block_diag
 from copy import deepcopy, copy
 import rospy
@@ -42,7 +41,32 @@ class UKF:
         ###############################################################################
         # Compute L'
         self.sigma_point(X.reshape(-1, 1), P, self.kappa_g)
-        # self
+        X_pred = np.zeros_like(X, dtype=float)
+        P_pred = np.zeros_like(P, dtype=float)
+
+        # print("self.X = ", self.X)
+        # print("self.w = ", self.w)
+        # np.apply_along_axis(self.gfun(u), 0, self.X)
+        for i in range(2 * self.n + 1):
+            # print(i)
+            # self.X[:, i] = self.gfun(self.X[:, i], u)
+            X_pred += self.w[i] * self.gfun(self.X[:, i], u)
+            # print("new = ", self.w[i] * self.gfun(self.X[:, i], u))
+            # print("X_pred = ", X_pred)
+        
+        # X_pred = np.mean(self.X * self.w, axis=1)
+        # X_pred /= (self.n * 2 + 1)
+        # print("X_pred.shape = ", X_pred)
+
+        for i in range(2 * self.n + 1):
+            # print(i)
+            # print("self.X[:, i] = ", (self.X[:, i] - X_pred).reshape(-1, 1))
+            P_pred += (self.gfun(self.X[:, i], u) - X_pred).reshape(-1, 1) @ (self.gfun(self.X[:, i], u) - X_pred).reshape(-1, 1).T  * self.w[i]
+        P_pred += self.M(u)
+        # print(P_pred)
+
+
+
 
         ###############################################################################
         #                         END OF YOUR CODE                                    #
@@ -67,6 +91,59 @@ class UKF:
         # Hint: you can use landmark1.getPosition()[0] to get the x position of 1st   #
         #       landmark, and landmark1.getPosition()[1] to get its y position        #
         ###############################################################################
+        self.sigma_point(X_predict.reshape(-1, 1), P_predict, self.kappa_g)
+
+        
+
+        z1 = z[0:2]
+        print("z1 = ", z1)
+        # z2 = z.reshape(6, -1)[0:3, :]
+        z2 = z[3:5]
+        print("z2 = ", z2)
+        # print("z.shape = ", z.shape)
+
+        z_stack = np.concatenate((z1, z2), axis=0)
+        
+        z_pred = np.zeros_like(z_stack)
+
+        for i in range(2 * self.n + 1):
+            h1 = self.hfun(landmark1.getPosition()[0], landmark1.getPosition()[1], self.X[:, i])
+            h2 = self.hfun(landmark2.getPosition()[0], landmark2.getPosition()[1], self.X[:, i])
+            h_stack = np.concatenate((h1, h2), axis=0)
+            z_pred += h_stack * self.w[i]
+
+        z_pred /= (2 * self.n + 1)
+        print("z_pred.shape = ", z_pred.shape)
+        innovation = z_stack - z_pred
+
+        Q_stack = block_diag(self.Q, self.Q)
+        innovation_cov = np.zeros_like(Q_stack)
+        cross = np.zeros((3, 4))
+
+        for i in range(2 * self.n + 1):
+            h1 = self.hfun(landmark1.getPosition()[0], landmark1.getPosition()[1], self.X[:, i])
+            h2 = self.hfun(landmark2.getPosition()[0], landmark2.getPosition()[1], self.X[:, i])
+            h_stack = np.concatenate((h1, h2), axis=0)
+            # print(h_stack)
+            innovation_cov += self.w[i] * (h_stack - z_pred).reshape(-1, 1) @ (h_stack - z_pred).reshape(-1, 1).T
+            cross += self.w[i] * (self.X[:, i] - X_predict).reshape(-1, 1) @ (h_stack - z_pred).reshape(-1, 1).T
+        
+        innovation_cov += Q_stack
+
+        K = cross @ np.linalg.inv(innovation_cov)
+        X = X_predict + K @ innovation
+        P = P_predict - K @ innovation_cov @ K.T
+
+        # X = X_predict
+        # P = P_predict
+
+
+        # innovation_cov = H_stack @ P_predict @ H_stack.T + Q_stack
+
+        # K = P_predict @ H_stack.T @ np.linalg.inv(innovation_cov)
+
+        # X = X_predict + K @ innovation
+        # P = (np.identity(3) - K @ H_stack) @ P_predict
 
         
         ###############################################################################
