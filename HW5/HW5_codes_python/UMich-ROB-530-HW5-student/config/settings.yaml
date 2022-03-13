@@ -8,7 +8,7 @@ data_path: "./data/data.mat"
 
 ### Robot System ###
 filter_name: "InEKF"      # name of the filter # EKF # UKF # PF # InEKF # test
-Lie2Cart: False            # Lie to Cartesian for 2.E extra points
+Lie2Cart: True            # Lie to Cartesian for 2.E extra points
 
 # motion noise (in odometry space, see Table 5.5, p.134 in book).
 # alphas_sqrt: [0.25, 0.05, 2.5, 0.5, 2.5, 0.5]

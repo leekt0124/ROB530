@@ -112,7 +112,7 @@ class UKF:
             h_stack = np.concatenate((h1, h2), axis=0)
             z_pred += h_stack * self.w[i]
 
-        z_pred /= (2 * self.n + 1)
+        # z_pred /= (2 * self.n + 1)
         print("z_pred.shape = ", z_pred.shape)
         innovation = z_stack - z_pred
 
