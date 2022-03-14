@@ -1,3 +1,4 @@
+from textwrap import wrap
 import numpy as np
 from scipy.linalg import block_diag
 from copy import deepcopy, copy
@@ -54,6 +55,8 @@ class EKF:
         print("self.M = ", self.M(u))
         M = self.M(u)
         P_pred = G @ P @ G.T + V @ M @ V.T
+
+        X_pred[2] = wrap2Pi(X_pred[2])
         
 
         ###############################################################################
@@ -108,11 +111,13 @@ class EKF:
 
         K = P_predict @ H_stack.T @ np.linalg.inv(innovation_cov)
 
-        # X = X_predict + K @ innovation
-        # P = (np.identity(3) - K @ H_stack) @ P_predict
+        X = X_predict + K @ innovation
+        P = (np.identity(3) - K @ H_stack) @ P_predict
 
-        X = X_predict
-        P = P_predict
+        X[2] = wrap2Pi(X[2])
+
+        # X = X_predict
+        # P = P_predict
 
         # innovation = z1 - h
         # print("P_predict = ", P_predict)

@@ -9,7 +9,10 @@ def wrap2Pi(input):
 
     return phases
 
-def unscented_propagate(mean, cov, kappa):
+def func(x): # lie algebra -> cart
+    return vee(expm(wedge(x)))
+
+def unscented_propagate(mean, cov, kappa): # lie algebra
     n = np.size(mean)
 
     x_in = np.copy(mean)
@@ -44,17 +47,51 @@ def unscented_propagate(mean, cov, kappa):
 
     return new_cov
 
+def wedge(x):
+    # wedge operation for so(3) to put an R^3 vector to the Lie algebra basis
+    G1 = np.array([[0, 0, 1],
+                    [0, 0, 0],
+                    [0, 0, 0]])  
+    G2 = np.array([[0, 0, 0],
+                    [0, 0, 1],
+                    [0, 0, 0]])  
+    G3 = np.array([[0, -1, 0],
+                    [1, 0, 0],
+                    [0, 0, 0]])  
+    xhat = G1 * x[0] + G2 * x[1] + G3 * x[2]
+    return xhat
 
-def lieToCartesian(mean, cov):
+def vee(x):
+    return np.array([x[0, 2], x[1, 2], x[1, 0]])
+
+def pose_mat(X):
+    x = X[0]
+    y = X[1]
+    h = X[2]
+    H = np.array([[np.cos(h),-np.sin(h),x],\
+                [np.sin(h),np.cos(h),y],\
+                [0,0,1]])
+    return H
+
+
+def lieToCartesian(mean, cov): # mean: lie group, cov: lie algebra
     ###############################################################################
     # TODO: Implement the lieToCartesian function for extra credits               #
     # Hint: you can use unscented transform                                       #
     # Hint: save the mean and cov as mu_cart and Sigma_cart                       #
-    
-    
     ###############################################################################
     #                         END OF YOUR CODE                                    #
     ###############################################################################
+    # se(2) -> SE(2)
+    mean_H = pose_mat(mean)
+    mean_se2 = vee(logm(mean_H))
+    mu_cart = mean
+    Sigma_cart = unscented_propagate(mean_se2, cov, 2)
+
+    print("mean = ", mean)
+    print("cov = ", cov)
+    print("mean_H = ", mean_H)
+    print("mean_se2 = ", mean_se2)
 
     return mu_cart, Sigma_cart
 
@@ -73,12 +110,31 @@ def mahalanobis(state, ground_truth, filter_name, Lie2Cart):
     #       For InEKF, if Lie2Cart flag is true, you should use                   #
     #       state.getCartesianState() and state.getCartesianCovariance() instead. #
     ###############################################################################
+    results = np.zeros((7, 1))
+    if filter_name in ["EKF", "PF", "UKF"]:
+        cov = state.getCovariance()
+        X = state.getState()
+    elif filter_name == "InEKF":
+        X = state.getCartesianState()
+        cov = state.getCartesianCovariance()
+
+    offset = (X - ground_truth).reshape(-1, 1)
+    results[1:4, :] = offset
+    dis = np.sqrt(offset.T @ np.linalg.inv(cov) @ offset)
+    results[0, :] = dis
+    results[4] = np.sqrt(cov[0, 0]) * 3
+    results[5] = np.sqrt(cov[1, 1]) * 3
+    results[6] = np.sqrt(cov[2, 2]) * 3
+    print("cov = ", cov)
+    print("offset = ", offset)
+    print("results = ", results)
+
 
     
     ###############################################################################
     #                         END OF YOUR CODE                                    #
     ###############################################################################
-        return results.reshape(-1)
+    return results.reshape(-1)
     
 
 def plot_error(results, gt):

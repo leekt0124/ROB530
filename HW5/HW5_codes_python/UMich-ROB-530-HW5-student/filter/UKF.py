@@ -65,6 +65,8 @@ class UKF:
         P_pred += self.M(u)
         # print(P_pred)
 
+        X_pred[2] = wrap2Pi(X_pred[2])
+
 
 
 
@@ -133,6 +135,8 @@ class UKF:
         K = cross @ np.linalg.inv(innovation_cov)
         X = X_predict + K @ innovation
         P = P_predict - K @ innovation_cov @ K.T
+
+        X[2] = wrap2Pi(X[2])
 
         # X = X_predict
         # P = P_predict

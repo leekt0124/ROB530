@@ -116,7 +116,6 @@ class InEKF:
         ###############################################################################
         
     def H(self, m):
-        # shape of m: (3, )
         return np.array([[-1, 0, m[1]], [0, -1, -m[0]], [0, 0, 0]])
 
     
@@ -134,6 +133,7 @@ class InEKF:
         # print("V_stack = ", V_stack)
 
         N = (self.X_pred @ V_stack @ self.X_pred.T)[0:2, 0:2]
+        print("N = ", N)
         N_stack = block_diag(N, N)
         print("N_stack = ", N_stack)
 

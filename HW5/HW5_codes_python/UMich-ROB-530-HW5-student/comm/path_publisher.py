@@ -72,6 +72,7 @@ class path_publisher:
             if self.filter_name != "InEKF":
                 cov[0:2,0:2] = state.getCovariance()[0:2,0:2]
             else:
+                cov[0:2,0:2] = state.getCartesianCovariance()[0:2,0:2] # I add this!
                 ellipse_line_msg = self.make_ellipse(state)
                 self.ellipse_pub.publish(ellipse_line_msg)
 
