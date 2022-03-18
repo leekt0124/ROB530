@@ -133,7 +133,6 @@ class InEKF:
         # print("V_stack = ", V_stack)
 
         N = (self.X_pred @ V_stack @ self.X_pred.T)[0:2, 0:2]
-        print("N = ", N)
         N_stack = block_diag(N, N)
         print("N_stack = ", N_stack)
 
