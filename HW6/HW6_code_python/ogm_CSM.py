@@ -40,7 +40,7 @@ class ogm_CSM:
         # Initialize prior, prior_alpha
         # -----------------------------------------------
         self.prior = None            # prior for setting up mean and variance
-        self.prior_alpha = None      # a small, uninformative prior for setting up alpha
+        self.prior_alpha = 0.001      # a small, uninformative prior for setting up alpha
 
     def construct_map(self, pose, scan):
         # class constructor
@@ -67,10 +67,10 @@ class ogm_CSM:
         # To Do: 
         # Initialization map parameters such as map['mean'], map['variance'], map['alpha'], map['beta']
         # -----------------------------------------------
-        self.map['mean'] = 0.5 * np.ones((self.map['size'], 1))       # size should be (number of data) x (1)
-        self.map['variance'] = 0.25 * np.ones((self.map['size'], 1))   # size should be (number of data) x (1)
-        self.map['alpha'] = 0.001 * np.ones((self.map['size'], 1))
-        self.map['beta'] = 0.001 * np.ones((self.map['size'], 1))
+        self.map['mean'] = (self.prior_alpha / 2 * self.prior_alpha) * np.ones((self.map['size'], 1))       # size should be (number of data) x (1)
+        self.map['variance'] = (self.prior_alpha * self.prior_alpha / (self.prior_alpha + self.prior_alpha) ** 2 / self.prior_alpha + self.prior_alpha + 2) * np.ones((self.map['size'], 1))   # size should be (number of data) x (1)
+        self.map['alpha'] = self.prior_alpha * np.ones((self.map['size'], 1))
+        self.map['beta'] = self.prior_alpha * np.ones((self.map['size'], 1))
 
 
     def is_in_perceptual_field(self, m, p):

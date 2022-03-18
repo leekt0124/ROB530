@@ -22,8 +22,8 @@ class ogm_continous_S_CSM:
         self.n_beams = 133  # number of beams, we set it to 133 because not all measurements in the dataset contains 180 beams 
 
         # grid map parameters
-        # self.grid_size = 0.135                  # adjust this for task 4.B
-        self.grid_size = 1                 # adjust this for task 4.B
+        self.grid_size = 0.5                  # adjust this for task 4.B
+        # self.grid_size = 1                 # adjust this for task 4.B
         self.nn = 16                            # number of nearest neighbor search
 
         # map structure
@@ -131,33 +131,20 @@ class ogm_continous_S_CSM:
         map_y = self.map['occMap'].data[i, 1]
         d1 = np.sqrt((global_x - map_x) ** 2 + (global_y - map_y) ** 2)
         if d1 < self.l:
-            # d_alpha += self.kernel(d1)
-            # print("hi")
-            # print("i = ", i)
-            # print("k = ", k)
-            # print("[i, int(z[k, 2]-1)] = ", [i, int(z[k, 2]-1)])
             self.map['alpha'][i, int(z[idx, 2]-1)] += self.kernel(d1)
+
             # pass
         
         # Sample points
         laser_length = z[idx, 0]
-        # print("laser_length = ", laser_length)
         self.step = self.l
         n_sample = int(laser_length // self.step)
-        # print("n_sample = ", n_sample)
-        for i in range(n_sample + 1):
-            sample_x = self.pose['x'][k][0] + i * self.step * np.cos(z[idx,1] + self.pose['h'][k][0])
-            sample_y = self.pose['y'][k][0] + i * self.step * np.sin(z[idx,1] + self.pose['h'][k][0])
+        for j in range(n_sample + 1):
+            sample_x = self.pose['x'][k][0] + j * self.step * np.cos(z[idx,1] + self.pose['h'][k][0])
+            sample_y = self.pose['y'][k][0] + j * self.step * np.sin(z[idx,1] + self.pose['h'][k][0])
             d2 = np.sqrt((sample_x - map_x) ** 2 + (sample_y - map_y) ** 2)
-            # print("d2 = ", d2)
             if d2 < self.l:
-                # d_beta += self.kernel(d2)
-                # print("self.kernel(d2) = ", self.kernel(d2))
-                self.map['alpha'][i, self.num_classes] = self.map['alpha'][i, self.num_classes] + 1000
-                # print(self.map['alpha'][i, self.num_classes])
-                # self.map['alpha'][i, self.num_classes] += self.kernel(d2)
-                print(self.map['alpha'][i, self.num_classes])
-                print("alpha = ", self.map['alpha'][i, :])
+                self.map['alpha'][i, self.num_classes] += self.kernel(d2)
 
     def build_ogm(self):
         # build occupancy grid map using the binary Bayes filter.
@@ -183,17 +170,12 @@ class ogm_continous_S_CSM:
                         # update the sensor model in cell i
                         # -----------------------------------------------
                         self.continuous_S_CSM(z, i, k)
-                        # print("alpha = ", self.map['alpha'][i, :])
 
             # -----------------------------------------------
             # To Do: 
             # update mean and variance for each cell i
             # -----------------------------------------------
-            print("alpha = ", self.map['alpha'][i, :])
-
             alpha_sum = np.sum(self.map['alpha'][i, :])
             self.map['mean'][i] = self.map['alpha'][i] / alpha_sum
-            print(self.map['mean'][i])
             max_alpha = np.max(self.map['alpha'][i])
             self.map['variance'][i] = (max_alpha / alpha_sum) * (1 - max_alpha / alpha_sum) / (alpha_sum + 1)
-            # print(self.map['variance'][i])

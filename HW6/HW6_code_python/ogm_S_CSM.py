@@ -23,7 +23,7 @@ class ogm_S_CSM:
 
         # grid map parameters
         # self.grid_size = 0.135
-        self.grid_size = 1
+        self.grid_size = 0.5
         self.w_obstacle = 2 * self.grid_size    # width of obstacle, 2 * grid_siz
         self.w_beam = 2 * np.pi / self.n_beams  # width of beam, 2 * pi/n_beams
         self.nn = 16                            # number of nearest neighbor search
@@ -111,7 +111,7 @@ class ogm_S_CSM:
         elif (self.m_i['range'] < z[k, 0]) and (z[k, 0] < self.z_max):
             # update free grid
             self.map['alpha'][i, self.num_classes] += 1
-            print(self.map['alpha'][i, self.num_classes])
+            # print(self.map['alpha'][i, self.num_classes])
 
 
 
@@ -146,7 +146,7 @@ class ogm_S_CSM:
             # -----------------------------------------------
             alpha_sum = np.sum(self.map['alpha'][i, :])
             self.map['mean'][i] = self.map['alpha'][i] / alpha_sum
-            print(self.map['mean'][i])
+            # print(self.map['mean'][i])
             max_alpha = np.max(self.map['alpha'][i])
             # print(max_alpha)
             self.map['variance'][i] = (max_alpha / alpha_sum) * (1 - max_alpha / alpha_sum) / (alpha_sum + 1)

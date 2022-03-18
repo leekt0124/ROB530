@@ -22,8 +22,8 @@ class ogm_continuous_CSM:
         self.n_beams = 133  # number of beams, we set it to 133 because not all measurements in the dataset contains 180 beams 
 
         # grid map parameters
-        # self.grid_size = 0.135  # adjust this for task 2.B
-        self.grid_size = 1  # adjust this for task 2.B
+        self.grid_size = 0.5  # adjust this for task 2.B
+        # self.grid_size = 1  # adjust this for task 2.B
         self.nn = 16            # number of nearest neighbor search
 
         # map structure
