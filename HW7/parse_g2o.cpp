@@ -75,7 +75,7 @@ int main() {
     cout << "result.dim() = " << result.dim() << endl;
 
     cout << "Saving data to txt file..." << endl;
-    std::ofstream optimized_file("/home/leekt/UMich/ROB530/HW7/plot/optimized.txt");
+    std::ofstream optimized_file("/home/leekt/UMich/ROB530/HW7/plot/1_b_optimized.txt");
     std::ofstream initial_file("/home/leekt/UMich/ROB530/HW7/plot/initial.txt");
     for (int i = 0; i < result.size(); ++i) {
         float x = result.at<Pose2>(i).x();
