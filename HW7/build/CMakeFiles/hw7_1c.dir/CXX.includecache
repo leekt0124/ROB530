@@ -1,0 +1,28 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/leekt/UMich/ROB530/HW7/hw7_1c.cpp
+iostream
+-
+fstream
+-
+string
+-
+gtsam/geometry/Pose2.h
+-
+gtsam/nonlinear/GaussNewtonOptimizer.h
+-
+gtsam/slam/BetweenFactor.h
+-
+gtsam/nonlinear/Values.h
+-
+gtsam/nonlinear/Marginals.h
+-
+gtsam/nonlinear/ISAM2.h
+-
+

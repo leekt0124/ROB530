@@ -1,0 +1,16 @@
+cmake_minimum_required(VERSION 2.8.11)
+project(hw7_slam)
+
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
+add_executable(hw7_1c hw7_1c.cpp)
+add_executable(Pose2SLAMExample Pose2SLAMExample.cpp)
+add_executable(Pose2SLAMExample_g2o Pose2SLAMExample_g2o.cpp)
+add_executable(parse_g2o parse_g2o.cpp)
+
+find_package(GTSAM REQUIRED)
+include_directories(&{GTSAM_INCLUDE_DIR})
+target_link_libraries(hw7_1c gtsam)
+# target_link_libraries(hw7_slam gtsam)
+target_link_libraries(Pose2SLAMExample gtsam)
+target_link_libraries(Pose2SLAMExample_g2o gtsam)
+target_link_libraries(parse_g2o gtsam)

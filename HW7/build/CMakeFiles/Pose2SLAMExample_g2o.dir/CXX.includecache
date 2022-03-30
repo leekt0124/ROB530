@@ -1,0 +1,18 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/leekt/UMich/ROB530/HW7/Pose2SLAMExample_g2o.cpp
+gtsam/slam/dataset.h
+-
+gtsam/geometry/Pose2.h
+-
+gtsam/nonlinear/GaussNewtonOptimizer.h
+-
+fstream
+-
+
