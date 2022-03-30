@@ -29,4 +29,7 @@ with open(optimized_data) as f:
         optimized_theta.append(float(theta))
 
 plt.plot(optimized_x, optimized_y)
+plt.legend(['Initial trajectory', 'optimized trajectory'])
+plt.xlabel('x')
+plt.ylabel('y')
 plt.show()
