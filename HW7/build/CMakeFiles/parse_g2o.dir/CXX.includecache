@@ -17,10 +17,14 @@ gtsam/geometry/Pose2.h
 -
 gtsam/nonlinear/GaussNewtonOptimizer.h
 -
+gtsam/nonlinear/LevenbergMarquardtOptimizer.h
+-
 gtsam/slam/BetweenFactor.h
 -
 gtsam/nonlinear/Values.h
 -
 gtsam/nonlinear/Marginals.h
+-
+gtsam/nonlinear/utilities.h
 -
 

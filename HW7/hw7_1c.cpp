@@ -54,7 +54,7 @@ int main() {
     auto priorNoise = noiseModel::Diagonal::Sigmas(Vector3(0.3, 0.3, 0.1));
 
     fstream newfile;
-    newfile.open("/home/leekt/UMich/ROB530/HW7/input_INTEL_g2o.g2o", ios::in);
+    newfile.open("/home/leekt/UMich/ROB530/HW7/data/input_INTEL_g2o.g2o", ios::in);
     if (newfile.is_open()) {
         string s;
         while (getline(newfile, s)) {
@@ -124,7 +124,7 @@ int main() {
         graph.resize(0);
         initialEstimate.clear();
     }
-    
+
     result.print("Final Result:\n"); // This step will print final values
 
     cout << "Saving data to txt file..." << endl;

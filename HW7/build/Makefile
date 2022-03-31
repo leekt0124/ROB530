@@ -111,6 +111,19 @@ depend:
 .PHONY : depend
 
 #=============================================================================
+# Target rules for targets named hw7_1b
+
+# Build rule for target.
+hw7_1b: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 hw7_1b
+.PHONY : hw7_1b
+
+# fast build rule for target.
+hw7_1b/fast:
+	$(MAKE) -f CMakeFiles/hw7_1b.dir/build.make CMakeFiles/hw7_1b.dir/build
+.PHONY : hw7_1b/fast
+
+#=============================================================================
 # Target rules for targets named Pose2SLAMExample_g2o
 
 # Build rule for target.
@@ -137,17 +150,17 @@ Pose2SLAMExample/fast:
 .PHONY : Pose2SLAMExample/fast
 
 #=============================================================================
-# Target rules for targets named parse_g2o
+# Target rules for targets named hw7_2b
 
 # Build rule for target.
-parse_g2o: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 parse_g2o
-.PHONY : parse_g2o
+hw7_2b: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 hw7_2b
+.PHONY : hw7_2b
 
 # fast build rule for target.
-parse_g2o/fast:
-	$(MAKE) -f CMakeFiles/parse_g2o.dir/build.make CMakeFiles/parse_g2o.dir/build
-.PHONY : parse_g2o/fast
+hw7_2b/fast:
+	$(MAKE) -f CMakeFiles/hw7_2b.dir/build.make CMakeFiles/hw7_2b.dir/build
+.PHONY : hw7_2b/fast
 
 #=============================================================================
 # Target rules for targets named hw7_1c
@@ -216,6 +229,33 @@ Pose2SLAMExample_g2o.cpp.s:
 	$(MAKE) -f CMakeFiles/Pose2SLAMExample_g2o.dir/build.make CMakeFiles/Pose2SLAMExample_g2o.dir/Pose2SLAMExample_g2o.cpp.s
 .PHONY : Pose2SLAMExample_g2o.cpp.s
 
+hw7_1b.o: hw7_1b.cpp.o
+
+.PHONY : hw7_1b.o
+
+# target to build an object file
+hw7_1b.cpp.o:
+	$(MAKE) -f CMakeFiles/hw7_1b.dir/build.make CMakeFiles/hw7_1b.dir/hw7_1b.cpp.o
+.PHONY : hw7_1b.cpp.o
+
+hw7_1b.i: hw7_1b.cpp.i
+
+.PHONY : hw7_1b.i
+
+# target to preprocess a source file
+hw7_1b.cpp.i:
+	$(MAKE) -f CMakeFiles/hw7_1b.dir/build.make CMakeFiles/hw7_1b.dir/hw7_1b.cpp.i
+.PHONY : hw7_1b.cpp.i
+
+hw7_1b.s: hw7_1b.cpp.s
+
+.PHONY : hw7_1b.s
+
+# target to generate assembly for a file
+hw7_1b.cpp.s:
+	$(MAKE) -f CMakeFiles/hw7_1b.dir/build.make CMakeFiles/hw7_1b.dir/hw7_1b.cpp.s
+.PHONY : hw7_1b.cpp.s
+
 hw7_1c.o: hw7_1c.cpp.o
 
 .PHONY : hw7_1c.o
@@ -243,32 +283,32 @@ hw7_1c.cpp.s:
 	$(MAKE) -f CMakeFiles/hw7_1c.dir/build.make CMakeFiles/hw7_1c.dir/hw7_1c.cpp.s
 .PHONY : hw7_1c.cpp.s
 
-parse_g2o.o: parse_g2o.cpp.o
+hw7_2b.o: hw7_2b.cpp.o
 
-.PHONY : parse_g2o.o
+.PHONY : hw7_2b.o
 
 # target to build an object file
-parse_g2o.cpp.o:
-	$(MAKE) -f CMakeFiles/parse_g2o.dir/build.make CMakeFiles/parse_g2o.dir/parse_g2o.cpp.o
-.PHONY : parse_g2o.cpp.o
+hw7_2b.cpp.o:
+	$(MAKE) -f CMakeFiles/hw7_2b.dir/build.make CMakeFiles/hw7_2b.dir/hw7_2b.cpp.o
+.PHONY : hw7_2b.cpp.o
 
-parse_g2o.i: parse_g2o.cpp.i
+hw7_2b.i: hw7_2b.cpp.i
 
-.PHONY : parse_g2o.i
+.PHONY : hw7_2b.i
 
 # target to preprocess a source file
-parse_g2o.cpp.i:
-	$(MAKE) -f CMakeFiles/parse_g2o.dir/build.make CMakeFiles/parse_g2o.dir/parse_g2o.cpp.i
-.PHONY : parse_g2o.cpp.i
+hw7_2b.cpp.i:
+	$(MAKE) -f CMakeFiles/hw7_2b.dir/build.make CMakeFiles/hw7_2b.dir/hw7_2b.cpp.i
+.PHONY : hw7_2b.cpp.i
 
-parse_g2o.s: parse_g2o.cpp.s
+hw7_2b.s: hw7_2b.cpp.s
 
-.PHONY : parse_g2o.s
+.PHONY : hw7_2b.s
 
 # target to generate assembly for a file
-parse_g2o.cpp.s:
-	$(MAKE) -f CMakeFiles/parse_g2o.dir/build.make CMakeFiles/parse_g2o.dir/parse_g2o.cpp.s
-.PHONY : parse_g2o.cpp.s
+hw7_2b.cpp.s:
+	$(MAKE) -f CMakeFiles/hw7_2b.dir/build.make CMakeFiles/hw7_2b.dir/hw7_2b.cpp.s
+.PHONY : hw7_2b.cpp.s
 
 # Help Target
 help:
@@ -277,10 +317,11 @@ help:
 	@echo "... clean"
 	@echo "... depend"
 	@echo "... rebuild_cache"
+	@echo "... hw7_1b"
 	@echo "... Pose2SLAMExample_g2o"
 	@echo "... Pose2SLAMExample"
+	@echo "... hw7_2b"
 	@echo "... edit_cache"
-	@echo "... parse_g2o"
 	@echo "... hw7_1c"
 	@echo "... Pose2SLAMExample.o"
 	@echo "... Pose2SLAMExample.i"
@@ -288,12 +329,15 @@ help:
 	@echo "... Pose2SLAMExample_g2o.o"
 	@echo "... Pose2SLAMExample_g2o.i"
 	@echo "... Pose2SLAMExample_g2o.s"
+	@echo "... hw7_1b.o"
+	@echo "... hw7_1b.i"
+	@echo "... hw7_1b.s"
 	@echo "... hw7_1c.o"
 	@echo "... hw7_1c.i"
 	@echo "... hw7_1c.s"
-	@echo "... parse_g2o.o"
-	@echo "... parse_g2o.i"
-	@echo "... parse_g2o.s"
+	@echo "... hw7_2b.o"
+	@echo "... hw7_2b.i"
+	@echo "... hw7_2b.s"
 .PHONY : help
 
 
