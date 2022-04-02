@@ -50,7 +50,7 @@ int main() {
         if (!fin.good()) break;
     }
 
-    // utilities::perturbPose2(initialEstimate, 0.05, 0.05);
+    utilities::perturbPose2(initialEstimate, 0.05, 0.05);
 
     GaussNewtonParams parameters;
     // Stop iterating once the change in error between steps is less than this value
