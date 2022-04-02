@@ -25,4 +25,4 @@ To plot the optimized trajectories, you'll need to go to the plot folder.
 
 ## Results
 ![](https://i.imgur.com/mw55Jvh.png)
-
+![](https://i.imgur.com/g31wqKU.png)
