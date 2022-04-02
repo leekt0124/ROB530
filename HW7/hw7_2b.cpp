@@ -20,7 +20,7 @@ int main() {
     // auto priorNoise = noiseModel::Diagonal::Sigmas(Vector6(0.3, 0.3, 0.3, 0.1, 0.1, 0.1));
     auto priorNoise = noiseModel::Diagonal::Sigmas((Vector(6)<<0.3,0.3,0.3,0.1,0.1,0.1).finished());
 
-    ifstream fin("/home/leekt/UMich/ROB530/HW7/data/parking-garage.g2o");
+    ifstream fin("../../data/parking-garage.g2o");
     istream& is = fin;
 
     while (!is.eof()) {
@@ -74,11 +74,13 @@ int main() {
     Values result = optimizer.optimize();
     result.print("Final Result:\n"); // This step will print final values
 
-    cout << "result.dim() = " << result.dim() << endl;
+    std::cout << "initial error=" << graph.error(initialEstimate) << std::endl;
+    std::cout << "final error=" << graph.error(result) << std::endl;
+
 
     cout << "Saving data to txt file..." << endl;
-    std::ofstream optimized_file("/home/leekt/UMich/ROB530/HW7/plot/2_b_optimized.txt");
-    std::ofstream initial_file("/home/leekt/UMich/ROB530/HW7/plot/2_initial.txt");
+    std::ofstream optimized_file("../../plot/2_b_optimized.txt");
+    std::ofstream initial_file("../../plot/2_initial.txt");
     for (int i = 0; i < result.size(); ++i) {
         float x = result.at<Pose3>(i).x();
         float y = result.at<Pose3>(i).y();

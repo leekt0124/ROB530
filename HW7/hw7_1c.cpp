@@ -54,7 +54,7 @@ int main() {
     auto priorNoise = noiseModel::Diagonal::Sigmas(Vector3(0.3, 0.3, 0.1));
 
     fstream newfile;
-    newfile.open("/home/leekt/UMich/ROB530/HW7/data/input_INTEL_g2o.g2o", ios::in);
+    newfile.open("../../data/input_INTEL_g2o.g2o", ios::in);
     if (newfile.is_open()) {
         string s;
         while (getline(newfile, s)) {
@@ -128,7 +128,7 @@ int main() {
     result.print("Final Result:\n"); // This step will print final values
 
     cout << "Saving data to txt file..." << endl;
-    std::ofstream optimized_file("/home/leekt/UMich/ROB530/HW7/plot/1_c_optimized.txt");
+    std::ofstream optimized_file("../../plot/1_c_optimized.txt");
     // std::ofstream initial_file("/home/leekt/UMich/ROB530/HW7/plot/1_cinitial.txt");
     for (int i = 0; i < result.size(); ++i) {
         float x = result.at<Pose2>(i).x();

@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 2.8.11)
 project(hw7_slam)
 
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
+set (CMAKE_CXX_STANDARD 17)
+
 add_executable(hw7_1c hw7_1c.cpp)
 add_executable(hw7_2b hw7_2b.cpp)
 add_executable(hw7_2c hw7_2c.cpp)

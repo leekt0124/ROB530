@@ -20,7 +20,7 @@ int main() {
 
     auto priorNoise = noiseModel::Diagonal::Sigmas(Vector3(0.3, 0.3, 0.1));
 
-    ifstream fin("/home/leekt/UMich/ROB530/HW7/data/input_INTEL_g2o.g2o");
+    ifstream fin("../../data/input_INTEL_g2o.g2o");
     while (!fin.eof()) {
         string name;
         fin >> name;
@@ -50,7 +50,7 @@ int main() {
         if (!fin.good()) break;
     }
 
-    utilities::perturbPose2(initialEstimate, 0.05, 0.05);
+    // utilities::perturbPose2(initialEstimate, 0.05, 0.05);
 
     GaussNewtonParams parameters;
     // Stop iterating once the change in error between steps is less than this value
@@ -63,11 +63,12 @@ int main() {
     Values result = optimizer.optimize();
     result.print("Final Result:\n"); // This step will print final values
 
-    cout << "result.dim() = " << result.dim() << endl;
+    std::cout << "initial error=" << graph.error(initialEstimate) << std::endl;
+    std::cout << "final error=" << graph.error(result) << std::endl;
 
     cout << "Saving data to txt file..." << endl;
-    std::ofstream optimized_file("/home/leekt/UMich/ROB530/HW7/plot/1_b_optimized.txt");
-    std::ofstream initial_file("/home/leekt/UMich/ROB530/HW7/plot/initial.txt");
+    std::ofstream optimized_file("../../plot/1_b_optimized.txt");
+    std::ofstream initial_file("../../plot/initial.txt");
     for (int i = 0; i < result.size(); ++i) {
         float x = result.at<Pose2>(i).x();
         float y = result.at<Pose2>(i).y();

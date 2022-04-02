@@ -1,8 +1,8 @@
 import matplotlib.pyplot as plt
 from mpl_toolkits import mplot3d
 
-initial_data = "/home/leekt/UMich/ROB530/HW7/plot/2_initial.txt"
-optimized_data = "/home/leekt/UMich/ROB530/HW7/plot/2_b_optimized.txt"
+initial_data = "../plot/2_initial.txt"
+optimized_data = "../plot/2_b_optimized.txt"
 
 initial_x = []
 initial_y = []

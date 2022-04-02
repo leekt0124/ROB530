@@ -27,8 +27,9 @@ struct Edge {
     int i, j;
     double x, y, z;
     Quaternion q;
-    Eigen::Matrix<double, 6, 6, Eigen::DontAlign> m;
-    Edge(int i_, int j_, double x_, double y_, double z_, Quaternion q_, Eigen::Matrix<double, 6, 6, Eigen::DontAlign> m_) :
+    Eigen::Matrix<double, 6, 6> m;
+    // Eigen::Matrix<double, 6, 6, Eigen::DontAlign> m;
+    Edge(int i_, int j_, double x_, double y_, double z_, Quaternion q_, Eigen::Matrix<double, 6, 6> m_) :
     i(i_), j(j_), x(x_), y(y_), z(z_), q(q_), m(m_) {} 
     friend ostream& operator<<(ostream& os, const Edge& dt);
 
@@ -60,11 +61,11 @@ int main() {
 
     auto priorNoise = noiseModel::Diagonal::Sigmas((Vector(6)<<0.3,0.3,0.3,0.1,0.1,0.1).finished());
 
-    ifstream fin("/home/leekt/UMich/ROB530/HW7/data/parking-garage.g2o");
+    ifstream fin("../../data/parking-garage.g2o");
     while (!fin.eof()) {
         string name;
         fin >> name;
-        cout << name << endl;
+        // cout << name << endl;
 
         if (name == "VERTEX_SE3:QUAT") {
             int i = 0;
@@ -82,7 +83,7 @@ int main() {
             double q11, q12, q13, q14, q15, q16, q22, q23, q24, q25, q26, q33, q34, q35, q36, q44, q45, q46, q55, q56, q66;
             fin >> i >> j >> x >> y >> z >> qx >> qy >> qz >> qw >> q11 >> q12 >> q13 >> q14 >> q15 >> q16 >> q22 >> q23 >> q24 >> q25 >> q26 >> q33 >> q34 >> q35 >> q36 >> q44 >> q45 >> q46 >> q55 >> q56 >> q66;
             Quaternion q(qw, qx, qy, qz);
-            Eigen::Matrix<double, 6, 6, Eigen::DontAlign> m;
+            Eigen::Matrix<double, 6, 6> m;
             m << q11, q12, q13, q14, q15, q16, 
                  q12, q22, q23, q24, q25, q26, 
                  q13, q23, q33, q34, q35, q36, 
@@ -112,25 +113,28 @@ int main() {
             initialEstimate.insert(i, prevPose);
             for (auto& edge : edges) {
                 if (edge.j == pose.i) {
-                    // Eigen::Matrix<double, 6, 6, Eigen::DontAlign> m = edge.m;
-                    auto model = noiseModel::Gaussian::Information(edge.m);
+                    // Eigen::Matrix<double, 6, 6> m = edge.m; // This line was due to 
+                    auto model = noiseModel::Gaussian::Information(edge.m); // This only runs in cpp17
                     graph.emplace_shared<BetweenFactor<Pose3>> (edge.i, edge.j, Pose3(edge.q, {edge.x, edge.y, edge.z}), model);
                 }
             }
         }
         isam.update(graph, initialEstimate);
         result = isam.calculateEstimate();
+        // std::cout << "final error=" << graph.error(result) << std::endl;
+
         graph.resize(0);
         initialEstimate.clear();
     }
 
     // std::cout << "initial error=" << graph->error(*initial) << std::endl;
-    std::cout << "final error=" << graph.error(result) << std::endl;
 
     result.print("Final Result:\n"); // This step will print final values
+    // std::cout << "final error=" << graph.error(result) << std::endl;
+
 
     cout << "Saving data to txt file..." << endl;
-    std::ofstream optimized_file("/home/leekt/UMich/ROB530/HW7/plot/2_c_optimized.txt");
+    std::ofstream optimized_file("../../plot/2_c_optimized.txt");
     // std::ofstream initial_file("/home/leekt/UMich/ROB530/HW7/plot/1_cinitial.txt");
     for (int i = 0; i < result.size(); ++i) {
         float x = result.at<Pose3>(i).x();
