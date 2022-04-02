@@ -12,12 +12,12 @@ I faced some issue for using Eigen::Matrix<double, 6, 6> member within a struct.
 
 ## Run
 You will need four commands to run this project. 
-`mkdir build`
-`cd build`
-`cmake ..`
-`make`
-`cd bin`
-`./hw7_##`
+`mkdir build`  
+`cd build`  
+`cmake ..`  
+`make`  
+`cd bin`  
+`./hw7_##`  
 
 ## Results
 ![](https://i.imgur.com/mw55Jvh.png)
