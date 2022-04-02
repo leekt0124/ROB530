@@ -150,6 +150,19 @@ Pose2SLAMExample/fast:
 .PHONY : Pose2SLAMExample/fast
 
 #=============================================================================
+# Target rules for targets named hw7_2c
+
+# Build rule for target.
+hw7_2c: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 hw7_2c
+.PHONY : hw7_2c
+
+# fast build rule for target.
+hw7_2c/fast:
+	$(MAKE) -f CMakeFiles/hw7_2c.dir/build.make CMakeFiles/hw7_2c.dir/build
+.PHONY : hw7_2c/fast
+
+#=============================================================================
 # Target rules for targets named hw7_2b
 
 # Build rule for target.
@@ -310,6 +323,33 @@ hw7_2b.cpp.s:
 	$(MAKE) -f CMakeFiles/hw7_2b.dir/build.make CMakeFiles/hw7_2b.dir/hw7_2b.cpp.s
 .PHONY : hw7_2b.cpp.s
 
+hw7_2c.o: hw7_2c.cpp.o
+
+.PHONY : hw7_2c.o
+
+# target to build an object file
+hw7_2c.cpp.o:
+	$(MAKE) -f CMakeFiles/hw7_2c.dir/build.make CMakeFiles/hw7_2c.dir/hw7_2c.cpp.o
+.PHONY : hw7_2c.cpp.o
+
+hw7_2c.i: hw7_2c.cpp.i
+
+.PHONY : hw7_2c.i
+
+# target to preprocess a source file
+hw7_2c.cpp.i:
+	$(MAKE) -f CMakeFiles/hw7_2c.dir/build.make CMakeFiles/hw7_2c.dir/hw7_2c.cpp.i
+.PHONY : hw7_2c.cpp.i
+
+hw7_2c.s: hw7_2c.cpp.s
+
+.PHONY : hw7_2c.s
+
+# target to generate assembly for a file
+hw7_2c.cpp.s:
+	$(MAKE) -f CMakeFiles/hw7_2c.dir/build.make CMakeFiles/hw7_2c.dir/hw7_2c.cpp.s
+.PHONY : hw7_2c.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -320,6 +360,7 @@ help:
 	@echo "... hw7_1b"
 	@echo "... Pose2SLAMExample_g2o"
 	@echo "... Pose2SLAMExample"
+	@echo "... hw7_2c"
 	@echo "... hw7_2b"
 	@echo "... edit_cache"
 	@echo "... hw7_1c"
@@ -338,6 +379,9 @@ help:
 	@echo "... hw7_2b.o"
 	@echo "... hw7_2b.i"
 	@echo "... hw7_2b.s"
+	@echo "... hw7_2c.o"
+	@echo "... hw7_2c.i"
+	@echo "... hw7_2c.s"
 .PHONY : help
 
 

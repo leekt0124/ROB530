@@ -56,6 +56,7 @@ CMAKE_BINARY_DIR = /home/leekt/UMich/ROB530/HW7/build
 all: CMakeFiles/hw7_1b.dir/all
 all: CMakeFiles/Pose2SLAMExample_g2o.dir/all
 all: CMakeFiles/Pose2SLAMExample.dir/all
+all: CMakeFiles/hw7_2c.dir/all
 all: CMakeFiles/hw7_2b.dir/all
 all: CMakeFiles/hw7_1c.dir/all
 
@@ -70,6 +71,7 @@ preinstall:
 clean: CMakeFiles/hw7_1b.dir/clean
 clean: CMakeFiles/Pose2SLAMExample_g2o.dir/clean
 clean: CMakeFiles/Pose2SLAMExample.dir/clean
+clean: CMakeFiles/hw7_2c.dir/clean
 clean: CMakeFiles/hw7_2b.dir/clean
 clean: CMakeFiles/hw7_1c.dir/clean
 
@@ -155,6 +157,33 @@ Pose2SLAMExample: CMakeFiles/Pose2SLAMExample.dir/rule
 CMakeFiles/Pose2SLAMExample.dir/clean:
 	$(MAKE) -f CMakeFiles/Pose2SLAMExample.dir/build.make CMakeFiles/Pose2SLAMExample.dir/clean
 .PHONY : CMakeFiles/Pose2SLAMExample.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/hw7_2c.dir
+
+# All Build rule for target.
+CMakeFiles/hw7_2c.dir/all:
+	$(MAKE) -f CMakeFiles/hw7_2c.dir/build.make CMakeFiles/hw7_2c.dir/depend
+	$(MAKE) -f CMakeFiles/hw7_2c.dir/build.make CMakeFiles/hw7_2c.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/leekt/UMich/ROB530/HW7/build/CMakeFiles --progress-num=11,12 "Built target hw7_2c"
+.PHONY : CMakeFiles/hw7_2c.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/hw7_2c.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/leekt/UMich/ROB530/HW7/build/CMakeFiles 2
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/hw7_2c.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/leekt/UMich/ROB530/HW7/build/CMakeFiles 0
+.PHONY : CMakeFiles/hw7_2c.dir/rule
+
+# Convenience name for target.
+hw7_2c: CMakeFiles/hw7_2c.dir/rule
+
+.PHONY : hw7_2c
+
+# clean rule for target.
+CMakeFiles/hw7_2c.dir/clean:
+	$(MAKE) -f CMakeFiles/hw7_2c.dir/build.make CMakeFiles/hw7_2c.dir/clean
+.PHONY : CMakeFiles/hw7_2c.dir/clean
 
 #=============================================================================
 # Target rules for target CMakeFiles/hw7_2b.dir

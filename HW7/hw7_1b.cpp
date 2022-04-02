@@ -19,50 +19,35 @@ int main() {
     Values initialEstimate;
 
     auto priorNoise = noiseModel::Diagonal::Sigmas(Vector3(0.3, 0.3, 0.1));
-    // auto odometryNoise = noiseModel::Diagonal::Sigmas(Vector3(0.2, 0.2, 0.1));
-    // auto measurementNoise = noiseModel::Diagonal::Sigmas(Vector3(0.1, 0.2));
 
-    fstream newfile;
-    newfile.open("/home/leekt/UMich/ROB530/HW7/data/input_INTEL_g2o.g2o", ios::in);
-    if (newfile.is_open()) {
-        string s;
-        while (getline(newfile, s)) {
-            // cout << s << endl;
-            vector<string> v;
-            string temp = "";
-            for (int i = 0; i < s.size(); ++i) {
-                if (s[i] == ' ') {
-                    v.push_back(temp);
-                    temp = "";
-                }
-                else {
-                    temp.push_back(s[i]);
-                }
+    ifstream fin("/home/leekt/UMich/ROB530/HW7/data/input_INTEL_g2o.g2o");
+    while (!fin.eof()) {
+        string name;
+        fin >> name;
+
+        if (name == "VERTEX_SE2") {
+            int i = 0;
+            fin >> i;
+            double x = 0, y = 0, theta = 0;
+            fin >> x >> y >> theta;
+            cout << i << " " << x << " " <<  y + theta << endl;
+            if (i == 0) {
+                graph.addPrior(i, Pose2(x, y, theta), priorNoise);
             }
-            v.push_back(temp);
-
-            if (v[0] == "VERTEX_SE2") {
-                int i = stoi(v[1]);
-                double x = stod(v[2]), y = stod(v[3]), theta = stod(v[4]);
-                // cout << i << " " << x << " " <<  y + z << endl;
-                if (i == 0) {
-                    graph.addPrior(i, Pose2(x, y, theta), priorNoise);
-                }
-                initialEstimate.insert(i, Pose2(x, y, theta));
-            }
-
-            else if (v[0] == "EDGE_SE2") {
-                int i = stoi(v[1]), j = stoi(v[2]);
-                double x = stod(v[3]), y = stod(v[4]), theta = stod(v[5]), q11 = stod(v[6]), q12 = stod(v[7]), q13 = stod(v[8]), q22 = stod(v[9]), q23 = stod(v[10]), q33 = stod(v[11]);
-                Eigen::Matrix<double, 3, 3> info;
-                info << q11, q12, q13, q12, q22, q23, q13, q23, q33;
-                auto model = noiseModel::Gaussian::Information(info);
-                graph.emplace_shared<BetweenFactor<Pose2>> (i, j, Pose2(x, y, theta), model);
-            }
-
-
+            initialEstimate.insert(i, Pose2(x, y, theta));
         }
-        newfile.close();
+
+        else if (name == "EDGE_SE2") {
+            int i = 0, j = 0;
+            double x = 0, y = 0, theta = 0, q11 = 0, q12 = 0, q13 = 0, q22 = 0, q23 = 0, q33 = 0;
+            fin >> i >> j >> x >> y >> theta >> q11 >> q12 >> q13 >> q22 >> q23 >> q33;
+            Eigen::Matrix<double, 3, 3> info;
+            info << q11, q12, q13, q12, q22, q23, q13, q23, q33;
+            auto model = noiseModel::Gaussian::Information(info);
+            graph.emplace_shared<BetweenFactor<Pose2>> (i, j, Pose2(x, y, theta), model);
+        }
+
+        if (!fin.good()) break;
     }
 
     utilities::perturbPose2(initialEstimate, 0.05, 0.05);
