@@ -11,7 +11,7 @@ I faced some issue for using Eigen::Matrix<double, 6, 6> member within a struct.
 * GTSAM
 
 ## Run
-You will need four commands to run this project. 
+You will need four commands to run this project.  
 `mkdir build`  
 `cd build`  
 `cmake ..`  
