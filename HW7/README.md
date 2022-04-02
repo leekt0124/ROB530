@@ -17,7 +17,11 @@ You will need four commands to run this project.
 `cmake ..`  
 `make`  
 `cd bin`  
-`./hw7_##`  
+`./hw7_##`  (## is the task number, ex: 1b, 2c)  
+
+To plot the optimized trajectories, you'll need to go to the plot folder.  
+`python3 plot_##.py` (## is the task number)  
+
 
 ## Results
 ![](https://i.imgur.com/mw55Jvh.png)
